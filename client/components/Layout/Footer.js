@@ -22,16 +22,16 @@ const Footer = () => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.menuContainer}
-        onPress={() => alert("Notification Page")}
+        onPress={() => navigation.navigate("notifications")}
       >
         <AntDesign
-          style={[styles.icon, route.name === "notification" && styles.active]}
+          style={[styles.icon, route.name === "notifications" && styles.active]}
           name="bells"
         />
         <Text
           style={[
             styles.iconText,
-            route.name === "notification" && styles.active,
+            route.name === "notifications" && styles.active,
           ]}
         >
           Notification
@@ -39,7 +39,7 @@ const Footer = () => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.menuContainer}
-        onPress={() => alert("Account Page")}
+        onPress={() => navigation.navigate("account")}
       >
         <AntDesign
           style={[styles.icon, route.name === "account" && styles.active]}
@@ -65,7 +65,9 @@ const Footer = () => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.menuContainer}
-        onPress={() => alert("Logout Page")}
+        onPress={() => {
+          alert("Logout Successfully"), navigation.navigate("login");
+        }}
       >
         <AntDesign style={styles.icon} name="logout" />
         <Text style={styles.iconText}>Logout</Text>
