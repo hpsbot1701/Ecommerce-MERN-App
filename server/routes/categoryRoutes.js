@@ -1,6 +1,6 @@
 import express from "express";
 
-import { isAuth } from "../middlewares/authMiddleware.js";
+import { isAdmin, isAuth } from "../middlewares/authMiddleware.js";
 import {
   createCategory,
   deleteCategoryController,
@@ -13,15 +13,15 @@ const router = express.Router();
 //routes
 // ========== CAT ROUTES ========
 // Create Category
-router.post("/create", isAuth, createCategory);
+router.post("/create", isAuth, isAdmin, createCategory);
 
 // Get All Category
 router.get("/get-all", getAllCategoryController);
 
 //Delete category
-router.delete("/delete/:id", isAuth, deleteCategoryController);
+router.delete("/delete/:id", isAuth, isAdmin, deleteCategoryController);
 
 //Update all category
-router.put("/update/:id", isAuth, updateCategoryController);
+router.put("/update/:id", isAuth, isAdmin, updateCategoryController);
 
 export default router;

@@ -3,6 +3,7 @@ import {
   getUserProfileController,
   loginController,
   logoutController,
+  passwordResetController,
   registerController,
   updatePasswordController,
   updateProfieController,
@@ -35,6 +36,9 @@ router.put("/update-password", isAuth, updatePasswordController);
 
 //Update profile pic
 router.put("/update-picture", isAuth, singleUpload, updateProfilePicController);
+
+//Forgot password
+router.post("/reset-password", passwordResetController);
 
 //export
 export default router;

@@ -158,3 +158,72 @@ export const paymentsController = async (req, res) => {
     });
   }
 };
+
+// ========= ADMIN SECTION =========
+
+//GET ALL ORDERS
+
+export const getAllOrdersController = async (req, res) => {
+  try {
+    const orders = await orderModel.find({});
+    res.status(200).send({
+      success: true,
+      message: "All Orders Data",
+      totalOrders: orders.length,
+      orders,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).send({
+      success: false,
+      message: "Error In Get all orders API",
+      error,
+    });
+  }
+};
+
+//Change order status
+export const changeOrderStatusController = async (req, res) => {
+  try {
+    //find order
+    const order = await orderModel.findById(req.params.id);
+    //validation
+    if (!order) {
+      return res.status(404).send({
+        success: false,
+        message: "order not found",
+      });
+    }
+    if (order.orderStatus === "processing") order.orderStatus = "shipped";
+    else if (order.orderStatus === "shipped") {
+      order.orderStatus = "deliverd";
+      order.deliverAt = Date.now();
+    } else {
+      return res.status(500).send({
+        success: false,
+        message: "order already deliverd",
+      });
+    }
+    await order.save();
+    res.status(200).send({
+      success: true,
+      message: "order status updated",
+    });
+  } catch (error) {
+    console.log(error);
+    // cast error || OBJECT ID
+    if (error.name === "CastError") {
+      res.status(500).send({
+        success: false,
+        message: "Invalid Id",
+      });
+    }
+
+    res.status(500).send({
+      success: false,
+      message: "Error In change order status API",
+      error,
+    });
+  }
+};

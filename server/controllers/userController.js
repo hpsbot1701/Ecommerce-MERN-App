@@ -3,7 +3,8 @@ import cloudinary from "cloudinary";
 import { getDataUri } from "../utils/Feature.js";
 export const registerController = async (req, res) => {
   try {
-    const { name, email, password, address, city, country, phone } = req.body;
+    const { name, email, password, address, city, country, phone, answer } =
+      req.body;
     //validation
     if (
       !name ||
@@ -12,7 +13,8 @@ export const registerController = async (req, res) => {
       !address ||
       !city ||
       !country ||
-      !phone
+      !phone ||
+      !answer
     ) {
       return res.status(500).send({
         success: false,
@@ -36,6 +38,7 @@ export const registerController = async (req, res) => {
       city,
       country,
       phone,
+      answer,
     });
     res.status(201).send({
       success: true,
@@ -244,6 +247,43 @@ export const updateProfilePicController = async (req, res) => {
     res.status(500).send({
       success: false,
       message: "Error in Update Password Api",
+      error,
+    });
+  }
+};
+
+//Forgot Password
+export const passwordResetController = async (req, res) => {
+  try {
+    //user get email || password || answer
+    const { email, newPassword, answer } = req.body;
+    //validation
+    if (!email || !newPassword || !answer) {
+      return res.status(500).send({
+        success: false,
+        message: "Please provide all fields",
+      });
+    }
+    // find user
+    const user = await userModel.findOne({ email, answer });
+    //validation
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "Invalid user or answer",
+      });
+    }
+    user.password = newPassword;
+    await user.save();
+    res.status(200).send({
+      success: true,
+      message: "Your Password Has Been Reset Please Login !",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error in Password Reset Api",
       error,
     });
   }
